@@ -6,17 +6,25 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed;
     private float direction;
+    [SerializeField]
     private bool hit;
     private Animator anim;
+    [SerializeField]
     private BoxCollider2D boxCollider;
     private float projectile_lifetime;
+    [SerializeField]
+    private Rigidbody2D rb;
 
+    private void Awake() {
+        anim = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        
 
         
     }
@@ -27,20 +35,26 @@ public class Projectile : MonoBehaviour
         if (hit) return;
 
         float movementSpeed = speed * Time.deltaTime * direction;
-        transform.Translate(movementSpeed, 0, 0);
-
-        projectile_lifetime += Time.deltaTime;
-        if (projectile_lifetime > 5 )
-            gameObject.SetActive(false);
+		this.transform.Translate(movementSpeed, 0, 0);
+		projectile_lifetime += Time.deltaTime;
+		if (projectile_lifetime > 2)
+		{
+			Deactivate();
+		}
     }
 
     private void OnTriggerEnter2D(Collider2D collision) 
     {
-        //kalau hit sesuati
+        //kalau hit sesuatu
         hit = true;
          
         boxCollider.enabled = false;
         anim.SetTrigger("explodes");  
+
+		//kalau hit enemy
+		if(collision.gameObject.tag == "Enemy"){
+			collision.gameObject.GetComponent<EnemyHealth>().TakeDamage(1);
+		}
          
     }
 
@@ -59,7 +73,8 @@ public class Projectile : MonoBehaviour
         {
             localScaleX = -localScaleX;
         }
-
+		Debug.Log("localScaleX: " + localScaleX);
+		Debug.Log("direction: " + direction);
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
 
     }
@@ -68,4 +83,6 @@ public class Projectile : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+	
 }

@@ -9,11 +9,12 @@ public class PlayerAttack : MonoBehaviour
     private Animator anim;
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
+    [SerializeField] private float fireballSpeed;
 
 
     //untuk fire fireball
     [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] fireballs;
+    public GameObject[] fireballs;
 
 
 
@@ -46,6 +47,29 @@ public class PlayerAttack : MonoBehaviour
         fireballs[CheckFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
 
     }
+
+    // private void Attack()
+    // {
+    //     anim.SetTrigger("attack"); // blm dibuat
+    //     cooldownTimer = 0;
+
+    //     //fireball
+    //     // StartCoroutine(Fireball());
+
+    //     // fireballs[CheckFireball()].transform.position = firePoint.position;
+    //     // fireballs[CheckFireball()].GetComponent<Projectile>().SetDirection(Mathf.Sign(transform.localScale.x));
+
+    // }
+
+    // private IEnumerator Fireball()
+    // {
+    //     float direction = transform.localScale.x > 0 ? 1f : -1f;
+    //     // Debug.Log(direction);
+    //     GameObject temp = Instantiate(fireballs, firePoint.position, Quaternion.identity);
+    //     fireballs.GetComponent<Projectile>().SetDirection(direction);
+    //     yield return new WaitForSeconds(5f);
+    //     Destroy(temp);
+    // }
 
 
     private int CheckFireball()
